@@ -313,17 +313,65 @@ The execution time reduces from 3612.243ms to 2.371ms.
 
 ## Step 3 - Measure Initial Performance
 
-- I will be stress testing GET and POST requests with 1, 10, 100, 1K requests per second using K6 and will use New Relic to obtain performance data.
+- Below starting this session, I need to have a goal. My current goal is **expect my website to serve 10K user simultaneously**.
+
+- I will be performance testing (load test and stress test) GET and POST requests with 1, 10, 100, 1K requests per second using K6 and will use New Relic to obtain performance data.
 
 1. Sign up `New Relic` account on its website. Then select `New Relic APM`.
 
   -  Then there is an installation video on the right hand side of the website. Follow the instructions to complete the installation.
 
-2. Install K6 (load testing tool)
+2. Increase Node's memory by running the following script in terminal `set NODE_OPTIONS=--max_old_space_size=8000`. See [reference](https://medium.com/tomincode/increasing-nodes-memory-337dfb1a60dd)
 
+3. Install caching with Redis.
 
+  - Make sure webpack is in "development" mode.
 
+  - Follow this [guide](https://codeburst.io/implement-caching-with-redis-in-express-js-and-mongodb-9aa09f9146ce)
 
+  - For Window, you can install through ubuntu using instruction [here](https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/)
+
+  - Create `redis.js` file inside `database/mongoDB/utils` folder.
+
+4. Create a `.env` file and store these data inside:
+```
+MONGO_HOST=localhost
+
+REDIS_PORT=6379
+
+SERVER_PORT=80
+```
+
+  - run `npm install npm dotenv`
+
+  - add `.env` to .gitignore so when you push to github, other people won't see it.
+
+  - put `require('dotenv').config();` in the `newIndex.js` file so the data can get pick up.
+
+  - update `condensedMongoSchema.js` for env variables.
+
+  - update `mongoDB/queries.js` file with `const redis = require('./utils/redis.js');`. 
+
+5. Install K6 (load testing tool)
+
+  - Create the folder inside database folder and write a script to check the get and post methods.
+
+  - Our target to get 1000 vus for local machine and 10000 in EC2.
+
+  - The following result is what I get from K6 with GET request:
+  ![k6-getReview](https://user-images.githubusercontent.com/32609294/83552108-1ae24780-a4be-11ea-8187-a500878a8525.JPG)
+
+  - The following result is what I get from New Relic:
+  ![newRelic-getReview](https://user-images.githubusercontent.com/32609294/83552291-5ed54c80-a4be-11ea-93eb-3d524bb9668d.JPG)
+
+  ![newRelic-getReview](https://user-images.githubusercontent.com/32609294/83552907-56c9dc80-a4bf-11ea-8a3e-ab0e83737b48.png)
+
+## Step 4 - Deploy the Service and Proxy
+
+1. Launch EC2 with Seed
+	- Use `Amazon Linux 2` and select `t2.medium`.
+	- Hit `Next` until you hit security configuration
+	- Add rule for "SSH", "HTTP", "HTTPS", "Custom TCP" types. For "HTTP", "HTTPS", and "Custom TCP", select "Anywhere" for source. For "Custom TCP" only., put your port number for Port Range.
 
 
 
