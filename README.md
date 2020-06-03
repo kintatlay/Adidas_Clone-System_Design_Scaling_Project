@@ -368,10 +368,36 @@ SERVER_PORT=80
 
 ## Step 4 - Deploy the Service and Proxy
 
-1. Launch EC2 with Seed
-	- Use `Amazon Linux 2` and select `t2.medium`.
-	- Hit `Next` until you hit security configuration
-	- Add rule for "SSH", "HTTP", "HTTPS", "Custom TCP" types. For "HTTP", "HTTPS", and "Custom TCP", select "Anywhere" for source. For "Custom TCP" only., put your port number for Port Range.
+1. Launch EC2 and deploy Database
+	1. Launch EC2
+		- Use `Amazon Linux 2` and select `t2.medium`.
+		- Hit `Next` until you hit security configuration
+		- Add rule for "SSH", "HTTP", "HTTPS", "Custom TCP" types. For "HTTP", "HTTPS", and "Custom TCP", select "Anywhere" for source. For "Custom TCP" only., put your port number for Port Range.
+		- Create a pem file and put it inside the root folder and make sure you include it in .gitignore
+		- run "chmod 700 xxx.pem" in terminal provided by pressing "Connect" on AWS website
+		- In AWS website, click `Elastic IPs` from the selection of the left drop down menu. Then press `Allocate Elastic IP address`. The reason we do this is to keep the IP address the same even if we shut down the instance because the IP address would change when we shut down instance. A new Public IPv4 address would create. Click on it. Click `Associate Elastic IP address`. With the `Instance` section, click on your current instance. Click `Associate`
+		- run `ssh ec2-user@54.67.64.151 -i adidas_micro.pem` - the number 54.153.0.155 you can get it from "IPv4 Public IP" in AWS EC2.
+
+	2. Install Node.js in EC2 Instance
+		- Follow [this](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html) instruction
+
+	3. Install MongoDB on EC2 Linux
+		- Follow [this](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-amazon/) instruction for installation.
+		- When ask to create a /etc/yum.repos.d/mongodb-org-4.2.repo file, run the following command line `sudo vi /etc/yum.repos.d/mongodb-org-4.2.repo`. You can save the file by press `esc` and then run `:wq` to save
+
+	4. Install Git
+		- run `sudo yum install git`
+
+	5. Start Seeding
+		- Git clone repo from Github
+		- run `npm install` for dependencies
+		- Go to the seed file location and run `node condensedMongoSeed.js`
+		
+
+
+
+
+
 
 
 

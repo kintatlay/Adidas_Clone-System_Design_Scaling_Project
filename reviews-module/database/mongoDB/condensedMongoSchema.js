@@ -1,5 +1,7 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/reviews', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+// mongoose.connect('mongodb://localhost/reviews', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect(`${process.env.MONGO_HOST}/reviews`, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 const Schema = mongoose.Schema;
 const productSchema = new Schema({
     product_id: { type: Number, required: true, unique: true },
