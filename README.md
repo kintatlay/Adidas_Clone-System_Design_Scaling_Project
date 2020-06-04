@@ -368,7 +368,7 @@ SERVER_PORT=80
 
 ## Step 4 - Deploy the Service and Proxy
 
-1. Launch EC2 and deploy Database
+1. Launch 1st EC2 instance to deploy Database
 	1. Launch EC2
 		- Use `Amazon Linux 2` and select `t2.medium`.
 		- Hit `Next` until you hit security configuration
@@ -393,7 +393,10 @@ SERVER_PORT=80
 		- run `npm install` for dependencies
 		- Go to the seed file location and run `node condensedMongoSeed.js`
 		
+2. Launch 2nd EC2 for service
+	1. Un-highlight redis script in `mongoDB/queries.js` file.
 
+	2. Delete the `bundle.js` file and rerun `bundle.js` file 
 
 
 

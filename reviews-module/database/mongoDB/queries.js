@@ -1,4 +1,5 @@
-const useCache = require('./utils/redis.js');
+/********  Fir redus ONLY  *******/
+// const useCache = require('./utils/redis.js');
 const Model = require('./condensedMongoSchema.js');
 
 // GET Request
@@ -13,18 +14,6 @@ const getReview = (request, response) => {
     }).limit(300);
 };
 
-// const getReviewByProductId = (request, response) => {
-//     const id = parseInt(request.params.id);
-//     Model.ProductModel.find({product_id: id}, (error, results) => {
-//         if (error) {
-//             response.status(500).send(error);
-//         } else {
-//             response.cache(id);
-//             response.status(200).send(results);
-//         }
-//     });
-// };
-
 const getReviewByProductId = (data, callback) => {
     const id = parseInt(data.params.id);
     Model.ProductModel.find({ product_id: id }, (error, results) => {
@@ -33,8 +22,20 @@ const getReviewByProductId = (data, callback) => {
         } else {
             return callback(null, results);
         }
-    }).cache(id);
+    });
 }
+
+/*********  For redis ONLY  ********/
+// const getReviewByProductId = (data, callback) => {
+//     const id = parseInt(data.params.id);
+//     Model.ProductModel.find({ product_id: id }, (error, results) => {
+//         if (error) {
+//             return callback(err);
+//         } else {
+//             return callback(null, results);
+//         }
+//     }).cache(id);
+// }
 
 // This formula should be named "getReviewAndUserByReviewId", but I used "getReviewAndUserByProductId" just so it's easier to switch between mongoDB and PostgreSQL databases
 const getReviewAndUserByProductId = (request, response) => {
