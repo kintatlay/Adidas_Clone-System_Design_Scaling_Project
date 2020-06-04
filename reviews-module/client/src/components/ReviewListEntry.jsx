@@ -57,7 +57,7 @@ class ReviewListEntry extends React.Component {
     var review = this.props.review;
     var date_placeholder = review.created_at.split('-');
     var created_date = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(date_placeholder[1])] + ' ' + (Number(date_placeholder[2].slice(0, 2))).toString() + ', ' + date_placeholder[0];
-    console.log('review', review);
+    // console.log('review', review);
     // console.log('nickname', review.user_nickname);
     if (review.rating_overall === 1) {
       var star = '★☆☆☆☆';

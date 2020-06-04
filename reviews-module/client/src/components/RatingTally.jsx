@@ -43,6 +43,7 @@ class RatingTally extends React.Component {
 
   /********  MongoDB  ********/
   render() {
+    var avgRating;
     var reviews = this.props.reviews[0].review;
     var totalRating_Overall = 0;
     var fiveStarRatingCount = 0;
@@ -64,12 +65,12 @@ class RatingTally extends React.Component {
         fiveStarRatingCount += 1;
       }
     }
-    var avgRating = Math.round(totalRating_Overall / reviews.length * 100) / 100;
     var fiveStarRatingCountPercentage = fiveStarRatingCount / reviews.length * 100;
     var fourStarRatingCountPercentage = fourStarRatingCount / reviews.length * 100;
     var threeStarRatingCountPercentage = threeStarRatingCount / reviews.length * 100;
     var twoStarRatingCountPercentage = twoStarRatingCount / reviews.length * 100;
     var oneStarRatingCountPercentage = oneStarRatingCount / reviews.length * 100;
+    reviews.length === 0 ? avgRating = 0 : avgRating = Math.round(totalRating_Overall / reviews.length * 100) / 100;
     // console.log(reviews);
     if (avgRating > 4.4) {
       var avgStar = '★★★★★';
