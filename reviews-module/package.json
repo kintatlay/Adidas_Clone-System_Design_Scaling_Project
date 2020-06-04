@@ -7,7 +7,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "dev": "start http://localhost:80 && nodemon server/newIndex.js",
+    "dev": "start http://localhost:3000 && nodemon server/newIndex.js",
     "start": "node ./server/index.js",
     "server-dev": "open http://localhost:3003 && nodemon server/index.js ",
     "build:bundle": "webpack -d",
