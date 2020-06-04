@@ -418,8 +418,16 @@ SERVER_PORT=80
 
 	6. Check to make sure you have `MONGO_HOST=mongodb://13.56.236.35:27017` in ".env" folder and then git push everything to github.
 
-
-
+	7. In the EC2 terminal, run these installations:
+		- Install Node.js in EC2 Instance
+			- Follow [this](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html) instruction
+		- Install Git
+			- run `sudo yum install git`
+		- Update `package.json` script by run `npm install concurrently`.
+			- change `nodemon` to `node` because nodemon does many things and it should only be used during development.
+		- Git clone the previously pushed repo.
+		- Run `npm run ec2-dev`
+		- In the web browser, enter `13.57.191.130:3000`. The website should shows up. If it doesn't, it probably there is an error with MongoDB.
 
 
 
