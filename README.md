@@ -331,6 +331,8 @@ The execution time reduces from 3612.243ms to 2.371ms.
 
   - For Window, you can install through ubuntu using instruction [here](https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/)
 
+  - To start, in one Ubuntu terminal, run `redis-server` and in another Ubuntu terminal, run `redis-cli`
+
   - Create `redis.js` file inside `database/mongoDB/utils` folder.
 
 4. Create a `.env` file and store these data inside:
@@ -392,13 +394,29 @@ SERVER_PORT=80
 		- Git clone repo from Github
 		- run `npm install` for dependencies
 		- Go to the seed file location and run `node condensedMongoSeed.js`
+
+	6. Change MongoDB config
+		- Run `sudo vi /etc/mongod.conf`
+		- Press `i` to edit
+		- comment out `bindIp: 127.0.0.1` by adding `#` to the left
+		- Add `bindIpAll: true` to the next line. Make sure you index it correctly.
+		- Run `sudo service mongod restart` to trigger the change.
+	
+	7. Testing server
+		- To test if database is setup correctly in EC2. Go to `.env` file in your local machine and change `MONGO_HOST=mongodb://localhost` to `MONGO_HOST=mongodb://13.56.236.35:27017`. Then make a webpage runs to see if data displays correctly. Note that "27017" is the default code for Mongo database.
 		
 2. Launch 2nd EC2 for service
 	1. Un-highlight redis script in `mongoDB/queries.js` file.
 
-	2. Delete the `bundle.js` file and rerun `bundle.js` file 
+	2. Delete the `bundle.js` file and rerun `bundle.js` file to get a js file without redis.
 
+	3. Go to AWS website and create another instance for the service with Linux. Can use `t2.micro`.
 
+	4. Save the "pem" file inside the root folder.
+
+	5. Press "connect" in AWS website and follow the instruction in "Connect to your instance". Go into the root folder where the pem file at and run `ssh ec2-user@13.57.191.130 -i adidas_service.pem`. "13.57.191.130" is the IPv4 Public IP.
+
+	6. Check to make sure you have `MONGO_HOST=mongodb://13.56.236.35:27017` in ".env" folder and then git push everything to github.
 
 
 
