@@ -52,21 +52,21 @@ class ReviewListEntry extends React.Component {
     super(props);
   }
 
+  /********  MongoDB  ********/
   render() {
-    console.log(this.props.review);
     var review = this.props.review;
-    var date_placeholder = review.created_at.split(' ').slice(1, 4);
-    var created_date = date_placeholder.slice(0, 2).join(' ').concat(', ', date_placeholder[2]);
+    var date_placeholder = review.created_at.split('-');
+    var created_date = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(date_placeholder[1])] + ' ' + (Number(date_placeholder[2].slice(0, 2))).toString() + ', ' + date_placeholder[0];
     console.log('review', review);
     // console.log('nickname', review.user_nickname);
-    if (review.rating_overall === '1') {
-      var star = '★';
-    } else if (review.rating_overall === '2') {
-      var star = '★★';
-    } else if (review.rating_overall === '3') {
-      var star = '★★★'
-    } else if (review.rating_overall === '4') {
-      var star = '★★★★';
+    if (review.rating_overall === 1) {
+      var star = '★☆☆☆☆';
+    } else if (review.rating_overall === 2) {
+      var star = '★★☆☆☆';
+    } else if (review.rating_overall === 3) {
+      var star = '★★★☆☆';
+    } else if (review.rating_overall === 4) {
+      var star = '★★★★☆';
     } else {
       var star = '★★★★★';
     };
@@ -77,17 +77,55 @@ class ReviewListEntry extends React.Component {
         <Title>{review.title}</Title>
         <Text>{review.text}</Text>
         {
-          review.doesrecommended
+          review.doesRecommended
             ?
             <Recommend>✓ I recommend this product</Recommend>
             :
             <DontRecommend>x I do not recommend this product</DontRecommend>
         }
-        <User>{review.nickname}</User>
-        <div>Was this review helpful? Yes ({review.ishelpful}) No ({review.isnothelpful})</div>
+        <User>{review.user.nickname}</User>
+        <div>Was this review helpful? Yes ({review.isHelpful}) No ({review.isNotHelpful})</div>
       </CollectionItem>
     )
   }
+
+  /********  PostageSQL  ********/
+  // render() {
+  //   // console.log(this.props.review);
+  //   var review = this.props.review;
+  //   var date_placeholder = review.created_at.split(' ').slice(1, 4);
+  //   var created_date = date_placeholder.slice(0, 2).join(' ').concat(', ', date_placeholder[2]);
+  //   // console.log('review', review);
+  //   // console.log('nickname', review.user_nickname);
+  //   if (review.rating_overall === '1') {
+  //     var star = '★';
+  //   } else if (review.rating_overall === '2') {
+  //     var star = '★★';
+  //   } else if (review.rating_overall === '3') {
+  //     var star = '★★★'
+  //   } else if (review.rating_overall === '4') {
+  //     var star = '★★★★';
+  //   } else {
+  //     var star = '★★★★★';
+  //   };
+  //   return (
+  //     <CollectionItem>
+  //       <Stars>{star}</Stars>
+  //       <Time>{created_date}</Time>
+  //       <Title>{review.title}</Title>
+  //       <Text>{review.text}</Text>
+  //       {
+  //         review.doesrecommended
+  //           ?
+  //           <Recommend>✓ I recommend this product</Recommend>
+  //           :
+  //           <DontRecommend>x I do not recommend this product</DontRecommend>
+  //       }
+  //       <User>{review.nickname}</User>
+  //       <div>Was this review helpful? Yes ({review.ishelpful}) No ({review.isnothelpful})</div>
+  //     </CollectionItem>
+  //   )
+  // }
 
 }
 // const ReviewListEntry = (props) => (

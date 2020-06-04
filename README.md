@@ -376,7 +376,7 @@ SERVER_PORT=80
 		- Create a pem file and put it inside the root folder and make sure you include it in .gitignore
 		- run "chmod 700 xxx.pem" in terminal provided by pressing "Connect" on AWS website
 		- In AWS website, click `Elastic IPs` from the selection of the left drop down menu. Then press `Allocate Elastic IP address`. The reason we do this is to keep the IP address the same even if we shut down the instance because the IP address would change when we shut down instance. A new Public IPv4 address would create. Click on it. Click `Associate Elastic IP address`. With the `Instance` section, click on your current instance. Click `Associate`
-		- run `ssh ec2-user@54.67.64.151 -i adidas_micro.pem` - the number 54.153.0.155 you can get it from "IPv4 Public IP" in AWS EC2.
+		- run `ssh ec2-user@13.56.236.35 -i adidas_micro.pem` - the number 54.153.0.155 you can get it from "IPv4 Public IP" in AWS EC2.
 
 	2. Install Node.js in EC2 Instance
 		- Follow [this](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html) instruction

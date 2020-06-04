@@ -151,8 +151,9 @@ class ReviewList extends React.Component {
     };
   }
 
+  /********  MongoDB  ********/
   render() {
-    // console.log(this.props.reviews);
+    var reviews = this.props.reviews[0].review;
     return (
       <Fragment>
         <div className="sort">
@@ -162,7 +163,7 @@ class ReviewList extends React.Component {
             <MenuItem><Button>relevant</Button></MenuItem>
           </ToggleMenu>
         </div>
-        {this.props.reviews.map((review, i) => 
+        {reviews.map((review, i) => 
           <ReviewListEntry key={i} review={review}/>
         )}
         <FooterControls>
@@ -186,6 +187,43 @@ class ReviewList extends React.Component {
       </Fragment>
     );
   }
+
+  /********  PostageSQL  ********/
+  // render() {
+  //   console.log(this.props.reviews);
+  //   return (
+  //     <Fragment>
+  //       <div className="sort">
+  //         <ToggleMenu>
+  //           <MenuItem><Button>newest</Button></MenuItem>
+  //           <MenuItem><Button>helpful</Button></MenuItem>
+  //           <MenuItem><Button>relevant</Button></MenuItem>
+  //         </ToggleMenu>
+  //       </div>
+  //       {this.props.reviews.map((review, i) =>
+  //         <ReviewListEntry key={i} review={review} />
+  //       )}
+  //       <FooterControls>
+  //         <LoadButton>
+  //           <span>load more</span>
+  //           <svg height="25px" width="25px">
+  //             <g fill="none" stroke="currentColor" strokeMiterlimit="10">
+  //               <StyledPathArrow d="M17.59 7l5 5-5 5M0 12h22"></StyledPathArrow>
+  //             </g>
+  //           </svg>
+  //         </LoadButton>
+  //         <WriteButton>
+  //           <span>write a review</span>
+  //           <svg height="25px" width="25px">
+  //             <g fill="none" stroke="currentColor" strokeMiterlimit="10">
+  //               <StyledPathArrow d="M17.59 7l5 5-5 5M0 12h22"></StyledPathArrow>
+  //             </g>
+  //           </svg>
+  //         </WriteButton>
+  //       </FooterControls>
+  //     </Fragment>
+  //   );
+  // }
 }
 
 export default ReviewList;

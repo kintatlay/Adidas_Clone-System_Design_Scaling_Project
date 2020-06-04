@@ -111,8 +111,8 @@ class App extends React.Component {
   fetchReviews() {
     // fetch(url)
     // .then(response => response.json())
-    // let url = `/product/21011`
-    let url = `/product/21011/user`
+    let url = `/product/2`
+    // let url = `/product/21011/user`
     // let url = `/api/models/${this.state.productcode}/reviews`;
     axios(url)
       .then(response => response.data)
@@ -127,6 +127,7 @@ class App extends React.Component {
 
   render() {
     let {reviews} = this.state;
+    // console.log(reviews);
     return (
       <>
         {reviews.length ? (
@@ -135,8 +136,8 @@ class App extends React.Component {
           <Heading>Ratings & Reviews</Heading>
           <ContentWrapper width={window.innerWidth}>
             <StatsSideDiv>
-              <RatingTally/>
-              <StatChart/>
+              <RatingTally reviews={reviews}/>
+              <StatChart reviews={reviews} />
             </StatsSideDiv>
             <ReviewDiv>
               <ReviewList reviews={reviews}/>
