@@ -7,7 +7,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "mongo-dev": "webpack -d --watch && nodemon server/newIndex.js",
+    "ec2-dev": "nodemon server/newIndex.js",
     "dev": "start http://localhost:3000 && nodemon server/newIndex.js",
     "start": "node ./server/index.js",
     "server-dev": "open http://localhost:3003 && nodemon server/index.js ",
