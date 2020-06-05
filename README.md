@@ -428,12 +428,45 @@ SERVER_PORT=80
 		- Git clone the previously pushed repo.
 		- Run `npm run ec2-dev`
 		- In the web browser, enter `13.57.191.130:3000`. The website should shows up. If it doesn't, it probably there is an error with MongoDB. Run `sudo service mongod start` to keep mongo going.
-		- In the EC2 server, you can keep it running even if you delete the terminal by running `nohup npm run ec2-dev &`. Then test it's running by enter `ps -ax | grep node`
+		- In the EC2 server, you can keep it running even if you delete the terminal by running `nohup npm run ec2-dev &`. Then test it's running by enter `ps -ax | grep node`. (optional: you can run `killall node` to remove nohup)
 
 	8. Install loader.io into the same folder that you put the `bundle.js` file
 		- Sign up for account with loader.io
 		- Inside loader.io, enter `http://13.57.191.130:3000/` for `New target host`. 
-		- Git push the file to github and git pull to the instance with the server.
+		- Git push the file to github and git pull to the instance with the server and do the nohup to run the application.
+		- Go back to loader.io to confirm target verification.
+		- Click `Add a new test`. [Reference](https://support.loader.io/article/21-expression-syntax)
+		![loader io test setup](https://user-images.githubusercontent.com/32609294/83833778-951ef180-a6a1-11ea-87ef-bcec66c86e90.JPG)
+
+		![loader io test result](https://user-images.githubusercontent.com/32609294/83833802-a49e3a80-a6a1-11ea-862f-93fba4f8dc6c.JPG)
+		- In the diagrams, you can tell that I am testing the last 10% of my database. There is 0 400 and 500 error response. There is 3 timeout which indicates there is ;likely 3 items that takes over 10 seconds (default) to generate a response. Response Counts is 9969. You use that number to divide by 60 second and you will get 166.15. This means that there is about 166.15 success responses when 800 clients visiting your website per seconds for that 1 minute, which is much below our throughput configuration of 800. The response time is 8399 ms which means that it takes about ~9 seconds to get the response from the GET request when 800 clients are visiting the website at the same time, but I need to target it to under 2000 ms. (Note that when you compare the loader.io result with NewRelic, you might get a slight different which loader.io giving a higher throughput. Goes with that.) You can go to the EC2 terminal root folder and run `less nohup.out` (then press shift + G) to see a log of which GET request items are being tested and used it to change the testing path. [Reference](https://drive.google.com/file/d/1OwlcFqDawUGwPXEVSXuivb8GVmdxEU7V/view)
+
+
+
+	9. New Relic vs Loader.io comparsion
+		- Next, we can switch to the New Relic website.
+		![newRelic Loader io comparsion 1](https://user-images.githubusercontent.com/32609294/83846837-15ece600-a6c0-11ea-933c-671c9f7eb935.JPG)
+		- From the diagram, you can tell that ~4720ms is different than the 8399ms. You can choose either the New Relic or Loader.io result in this part.
+		- Click on one of the transactions and you will notice the following diagram.
+		![newRelic Loader io comparsion 2](https://user-images.githubusercontent.com/32609294/83847184-ad523900-a6c0-11ea-979c-639b4ac3916d.JPG)
+		- From this diagram, you will notice that the majority of the response time is spend on `MongoDB products toArray`. Therefore, we need to figure out how to reduce that to reach out target goal of 2000.
+
+	10. AWS - Cloudwatch
+		- In the AWS website, search `Cloudwatch` and find the diagram for `CPU Utilization Average`.
+		![aws cpu usage](https://user-images.githubusercontent.com/32609294/83850112-484d1200-a6c5-11ea-8212-97877cda26a6.JPG)
+		- In the diagram, it shows that the peak of one of the stress test of the service instance is about 20% for the CPU usage, which is very minimal.
+
+	11.	Ram and CPU usage
+		- In the EC2 service, runs the command `top` and re-run one of the loader.io test
+		- You would notice the following RAM changes:
+		![Top Ram usage](https://user-images.githubusercontent.com/32609294/83851885-d32f0c00-a6c7-11ea-8bc9-bd56abe311c7.JPG)
+		- You can figure out how to improve the website performance by utilizing the data.
+
+	12. G-zip and webpack production mode update
+		- Run `npm install compression compression-webpack-plugin brotli-gzip-webpack-plugin`
+		- Update `webpack.config.js` with production configuration.
+		- Update script of package.json
+		- Run `npm run prod` to test if it works in local machine.
 
 
 
