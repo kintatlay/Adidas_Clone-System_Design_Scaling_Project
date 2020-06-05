@@ -7,7 +7,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "prod": "concurrently \"npm start\" \"web-prod\"",
+    "prod": "concurrently \"npm start\" \"npm run web-prod\"",
     "ec2-dev": "concurrently \"npm start\" \"npm run react-dev\"",
     "dev": "start http://localhost:3000 && nodemon server/newIndex.js",
     "start": "node ./server/newIndex.js",
