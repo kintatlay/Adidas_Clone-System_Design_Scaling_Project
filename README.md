@@ -427,10 +427,13 @@ SERVER_PORT=80
 			- change `nodemon` to `node` because nodemon does many things and it should only be used during development.
 		- Git clone the previously pushed repo.
 		- Run `npm run ec2-dev`
-		- In the web browser, enter `13.57.191.130:3000`. The website should shows up. If it doesn't, it probably there is an error with MongoDB.
+		- In the web browser, enter `13.57.191.130:3000`. The website should shows up. If it doesn't, it probably there is an error with MongoDB. Run `sudo service mongod start` to keep mongo going.
+		- In the EC2 server, you can keep it running even if you delete the terminal by running `nohup npm run ec2-dev &`. Then test it's running by enter `ps -ax | grep node`
 
-
-
+	8. Install loader.io into the same folder that you put the `bundle.js` file
+		- Sign up for account with loader.io
+		- Inside loader.io, enter `http://13.57.191.130:3000/` for `New target host`. 
+		- Git push the file to github and git pull to the instance with the server.
 
 
 
