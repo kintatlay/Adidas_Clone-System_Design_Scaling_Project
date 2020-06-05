@@ -10,9 +10,11 @@ const db = require('../database/mongoDB/queries.js');
 const port = process.env.SERVER_PORT || 3000;
 const path = require('path');
 const morgan = require('morgan');
+const compression = require('compression');
 
 app.use(cors());
 app.use(morgan('dev'));
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true,}));
 

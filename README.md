@@ -465,6 +465,7 @@ SERVER_PORT=80
 	12. G-zip and webpack production mode update
 		- Run `npm install compression compression-webpack-plugin brotli-gzip-webpack-plugin`
 		- Update `webpack.config.js` with production configuration.
+		- Update `newIndex.js` with compression dependency.
 		- Update script of package.json
 		- Run `npm run prod` to test if it works in local machine.
 
