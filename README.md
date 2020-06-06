@@ -375,6 +375,7 @@ SERVER_PORT=80
 		- Use `Amazon Linux 2` and select `t2.medium`.
 		- Hit `Next` until you hit security configuration
 		- Add rule for "SSH", "HTTP", "HTTPS", "Custom TCP" types. For "HTTP", "HTTPS", and "Custom TCP", select "Anywhere" for source. For "Custom TCP" only., put your port number for Port Range.
+		![AWS Security Setting Database](https://user-images.githubusercontent.com/32609294/83936663-88ba9780-a77a-11ea-8d4a-edcecf9f99eb.JPG)
 		- Create a pem file and put it inside the root folder and make sure you include it in .gitignore
 		- run "chmod 700 xxx.pem" in terminal provided by pressing "Connect" on AWS website
 		- In AWS website, click `Elastic IPs` from the selection of the left drop down menu. Then press `Allocate Elastic IP address`. The reason we do this is to keep the IP address the same even if we shut down the instance because the IP address would change when we shut down instance. A new Public IPv4 address would create. Click on it. Click `Associate Elastic IP address`. With the `Instance` section, click on your current instance. Click `Associate`
@@ -411,6 +412,8 @@ SERVER_PORT=80
 	2. Delete the `bundle.js` file and rerun `bundle.js` file to get a js file without redis.
 
 	3. Go to AWS website and create another instance for the service with Linux. Can use `t2.micro`.
+
+	![AWS Security Setting Service](https://user-images.githubusercontent.com/32609294/83936634-3ed1b180-a77a-11ea-85f8-86d670a1e3a5.JPG)
 
 	4. Save the "pem" file inside the root folder.
 
@@ -469,7 +472,8 @@ SERVER_PORT=80
 		- Update `newIndex.js` with compression dependency.
 		- Update script of package.json
 		- Run `npm run prod` to test if it works in local machine.
-		- Once it work, push to github and upload to EC2 server. Then run your instance there and do nohup to do a loader.io test. Some people improve their performance in this step. Unfortunately for me, it did not improve for my database.
+		- Once it works, push to github and upload to EC2 server. Then run your instance there and do nohup to do a loader.io test. For me, I was able to go up to 250 clients per second with average response time of much lower than 2000 (293ms is my result) and err rate of 0%. However, if I increases more clients per second, my err rate increases.
+		![loader io test result 3](https://user-images.githubusercontent.com/32609294/83937231-eb626200-a77f-11ea-9782-3724553e3452.JPG)
 
 3. Launch 3rd EC2 for NGINX
 	1. For setup, see [reference here](https://www.nginx.com/blog/setting-up-nginx/). Only install Nginx and not Nginx Plus. Note that the default security setting sets the nginx load balancer with port number of 80.
@@ -478,13 +482,38 @@ SERVER_PORT=80
 
 	3. Run `cd /etc/nginx/` and then `sudo vi nginx.conf`. See [reference](https://www.nginx.com/resources/wiki/start/topics/examples/dynamic_ssi/) to update "Nginx.conf". In my example, I updated with the following:
 
-	![Nginx conf Setup](https://user-images.githubusercontent.com/32609294/83934413-bba66080-a765-11ea-9ce4-8fecaeff95ce.JPG)
-	Please note that proper indexing does matter. "13.56.236.35" is the IPv4 of the EC2 service. You can name anything to replace "nodejs". The "nodejs" part of the "http://nodejs" has to match the "nodejs" of the upstream.
+	![Nginx conf Setup](https://user-images.githubusercontent.com/32609294/83935706-d6ca9d80-a770-11ea-8a90-c9fa93f37987.JPG)
+	Please note that proper indexing does matter. "13.57.191.130" is the IPv4 of the EC2 service. You can name anything to replace "nodejs". The "nodejs" part of the "http://nodejs" has to match the "nodejs" of the upstream.
 
 	4. Run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
 	![Nginx Check](https://user-images.githubusercontent.com/32609294/83934492-5737d100-a766-11ea-8055-c2e483326dde.JPG)
 
-	5. Go to `loader.io` website and replace the target host. My previous target host is `13.57.191.130:3000` which refers to my EC2 service. I will replace to `18.222.19.182:80`. Copy the verification token to the current token in the "client" folder.
+	5. Go to `loader.io` website and replace the target host. My previous target host is `13.57.191.130:3000` which refers to my EC2 service. I will replace to `18.222.19.182:80`. Copy the verification token to the current token in the "client" folder. Then git push to Git and go to EC2 service and re-run the service with the nohup setting activated. You may re-test the loader.io, the result should be similar to what we previously tested.
+
+4. Horizontal Scaling by create 4th and 5th EC2 Instances
+	1. Go to EC2 and select the 1st service. Select `Action` -> `Image` -> `Create Image`. For `Image name`, you can put `Service 2` and `2nd Instance for Service` for `Image description`. Then click `Create Image` on bottom. Then on AWS left drop down menu select `Images` then `AMIs`. Then click `Launch`. In security setting, following the previous security setting with the service:
+	![AWS Security Setting Service](https://user-images.githubusercontent.com/32609294/83936634-3ed1b180-a77a-11ea-85f8-86d670a1e3a5.JPG)
+	Generate an unique pem file and put in root folder.
+	If you receive an error with `Please login as the user "ec2-user" rather than the user "root".`, change the ssh script as follow:
+	![Image-error](https://user-images.githubusercontent.com/32609294/83936804-d4ba0c00-a77b-11ea-8e19-626456274fd8.JPG)
+	Then go to the root folder and run `nohup npm run prod &`
+	2. Repeat the previous process to get another image.
+	3. Go to the instance of the Nginx load balancer and modify the file `nginx.conf` to capture the servers.
+	![Nginx conf Setup2](https://user-images.githubusercontent.com/32609294/83937740-44cc9000-a784-11ea-8296-c7d63120f3b3.JPG)
+	Then run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
+
+5. After integrating with 3 services to Nginx, I began to look at loader.io, New Relic, and AWS Cloudwatch. Here's my analysis:
+![loader io 280 test setup](https://user-images.githubusercontent.com/32609294/83939546-b4e21280-a792-11ea-86d2-4692397e3fcb.JPG)
+![loader io 280 test result](https://user-images.githubusercontent.com/32609294/83939560-d9d68580-a792-11ea-8a73-c628b5063169.JPG)
+![loader io 300 test result](https://user-images.githubusercontent.com/32609294/83939566-e529b100-a792-11ea-9125-e8cd86a77f3e.JPG)
+When I look at the loader.io results, it shows that when I set 280 requests per seconds, the average response time is 186ms, which is much faster than what I have tested previously without Nginx setup. The error rate and timeout are also 0. However, when I set to 300 requests per seconds, it starts to build err rate an there is about 269 responses with 500 error codes. This is not good.
+![aws cpu usage 2](https://user-images.githubusercontent.com/32609294/83939687-bb24be80-a793-11ea-8840-c5f08158633a.JPG)
+When I look at the AWS Cloudwatch result, I noticed that the CPU usage is pretty low. So I don't have a CPU issue.
+![New Relic Result 1](https://user-images.githubusercontent.com/32609294/83939807-9ed55180-a794-11ea-914e-e88db0eb3359.JPG)
+![New Relic Result 2](https://user-images.githubusercontent.com/32609294/83939811-a72d8c80-a794-11ea-8fc3-329fdfc76170.JPG)
+When I look at the New Relic result, I realize that majority of the response time comes from "MongoDB products toArray". Therefore, I need to figure out how to improve the database.
+
+# TO BE CONTINUED
 
 
 
@@ -492,17 +521,7 @@ SERVER_PORT=80
 
 
 
-
-
-
-
-
-
-
-
-
-
-# Reviews Module 
+<!-- # Reviews Module 
 
 Reviews module for e-commerce website of Front End Capstone Project #HRSF127
 
@@ -580,4 +599,4 @@ npm install
 ### Install MySQL 5.7 on macOS
 This procedure explains how to install [MySQL](https://www.mysql.com) using [Homebrew](http://brew.sh) on macOS (Sierra 10.12 and up)
 
-https://gist.github.com/operatino/392614486ce4421063b9dece4dfe6c21
+https://gist.github.com/operatino/392614486ce4421063b9dece4dfe6c21 -->
