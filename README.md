@@ -441,7 +441,8 @@ SERVER_PORT=80
 		![loader io test result](https://user-images.githubusercontent.com/32609294/83833802-a49e3a80-a6a1-11ea-862f-93fba4f8dc6c.JPG)
 		- In the diagrams, you can tell that I am testing the last 10% of my database. There is 0 400 and 500 error response. There is 3 timeout which indicates there is ;likely 3 items that takes over 10 seconds (default) to generate a response. Response Counts is 9969. You use that number to divide by 60 second and you will get 166.15. This means that there is about 166.15 success responses when 800 clients visiting your website per seconds for that 1 minute, which is much below our throughput configuration of 800. The response time is 8399 ms which means that it takes about ~9 seconds to get the response from the GET request when 800 clients are visiting the website at the same time, but I need to target it to under 2000 ms. (Note that when you compare the loader.io result with NewRelic, you might get a slight different which loader.io giving a higher throughput. Goes with that.) You can go to the EC2 terminal root folder and run `less nohup.out` (then press shift + G) to see a log of which GET request items are being tested and used it to change the testing path. [Reference](https://drive.google.com/file/d/1OwlcFqDawUGwPXEVSXuivb8GVmdxEU7V/view)
 
-
+		![loader io test result 2](https://user-images.githubusercontent.com/32609294/83870260-ca97ff00-a6e2-11ea-969c-9092c6decf9d.JPG)
+		- As you can tell from the diagram, around 225 clients per second seem to be my limit as it averages around 1941 ms response time, which is slightly below my target of average 2000 ms response time.
 
 	9. New Relic vs Loader.io comparsion
 		- Next, we can switch to the New Relic website.
@@ -468,6 +469,35 @@ SERVER_PORT=80
 		- Update `newIndex.js` with compression dependency.
 		- Update script of package.json
 		- Run `npm run prod` to test if it works in local machine.
+		- Once it work, push to github and upload to EC2 server. Then run your instance there and do nohup to do a loader.io test. Some people improve their performance in this step. Unfortunately for me, it did not improve for my database.
+
+3. Launch 3rd EC2 for NGINX
+	1. For setup, see [reference here](https://www.nginx.com/blog/setting-up-nginx/). Only install Nginx and not Nginx Plus. Note that the default security setting sets the nginx load balancer with port number of 80.
+
+	2. Run `systemctl status nginx.service` to see if it is actively running.
+
+	3. Run `cd /etc/nginx/` and then `sudo vi nginx.conf`. See [reference](https://www.nginx.com/resources/wiki/start/topics/examples/dynamic_ssi/) to update "Nginx.conf". In my example, I updated with the following:
+
+	![Nginx conf Setup](https://user-images.githubusercontent.com/32609294/83934413-bba66080-a765-11ea-9ce4-8fecaeff95ce.JPG)
+	Please note that proper indexing does matter. "13.56.236.35" is the IPv4 of the EC2 service. You can name anything to replace "nodejs". The "nodejs" part of the "http://nodejs" has to match the "nodejs" of the upstream.
+
+	4. Run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
+	![Nginx Check](https://user-images.githubusercontent.com/32609294/83934492-5737d100-a766-11ea-8055-c2e483326dde.JPG)
+
+	5. Go to `loader.io` website and replace the target host. My previous target host is `13.57.191.130:3000` which refers to my EC2 service. I will replace to `18.222.19.182:80`. Copy the verification token to the current token in the "client" folder.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
