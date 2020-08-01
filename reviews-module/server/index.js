@@ -1,31 +1,42 @@
-// server flow: index.js -> routes -> controller -> model -> db-mysql
+require('newrelic');
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const path = require('path');
 const cors = require('cors');
-
-const middleware = require('./middleware.js');
-const router = require('./routes.js');
-
 const app = express();
-const PORT = process.env.REVIEWSPORT || 3003;
-app.set('port', PORT);
+// const db = require('../database/PostgreSQL/queries.js');
+const db = require('../database/mongoDB/queries.js');
+const port = process.env.SERVER_PORT || 3000;
+const path = require('path');
+const morgan = require('morgan');
+const compression = require('compression');
 
-// app.use(bodyParser.json());
-// app.use(morgan('dev'));
-app.use(express.json());
-app.use(middleware.httpRequestLogger);
 app.use(cors());
+app.use(morgan('dev'));
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true,}));
 
-app.get('/api', (req, res) => {
-  console.log('hello inside get route');
-  res.send('response sent correctly!');
+app.get('/review', db.getReview);
+app.get('/product/:id', (req, res) => {
+    db.getReviewByProductId(req, (err, results) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(results);
+        }
+    })
 });
 
-app.use('/api/models', router);
+app.post('/review', db.createReview);
+app.put('/review/:id', db.updateReview);
+app.delete('/review/:id', db.deleteReview);
+app.get('/product/:id/user', db.getReviewAndUserByProductId);
 
-app.use(express.static(path.join(__dirname, '../client', 'dist')));
+app.use('/', express.static(path.join(__dirname, '../client', 'dist')))
 
-app.listen(app.get('port'), () =>
-  console.log('Listening on port: ' + app.get('port')));
+app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+});
+

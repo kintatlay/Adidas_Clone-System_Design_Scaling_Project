@@ -9,8 +9,8 @@
   "scripts": {
     "prod": "concurrently \"npm start\" \"npm run web-prod\"",
     "ec2-dev": "concurrently \"npm start\" \"npm run react-dev\"",
-    "dev": "start http://localhost:3000 && nodemon server/newIndex.js",
-    "start": "node ./server/newIndex.js",
+    "dev": "start http://localhost:3000 && nodemon server/Index.js",
+    "start": "node ./server/Index.js",
     "web-prod": "webpack --mode=production",
     "server-dev": "open http://localhost:3003 && nodemon server/index.js ",
     "build:bundle": "webpack -d",

@@ -2,6 +2,10 @@
 
 **Note: I did not build the front-end. I only take the front-end and scale the backend for practice.**
 
+## Project Purpose
+
+The purpose of this project is to learn how to design a backend architectural system to stress test the web load. This involves learning to select multiple database management systems and determine which database system is a better fit for this type of e-commerce website. Then I have to build HTTP request methods and connect them to the databases. After benchmarking and finalize database system choice, I will host the website to multiple virtual machines and using Nginx as HTTP load balancer. I will use tools like New Relic, K6, and AWS cloudwatch to identify bottlenecks and G-zip and caching technique to optimize performance.
+
 ## Step 1 - Database Selection
 
 I used this video to get an idea on which database to select: https://www.youtube.com/watch?v=v5e_PasMdXc&feature=emb_logo
@@ -14,7 +18,6 @@ I used this video to get an idea on which database to select: https://www.youtub
     - Availability: It's important because when a user goes to your webpage to look for review, you need to show it.
     - Consistency: It's okay for a few second delay before a new review shows up while the user gets the old review.
     - Partition-tolerance: The web page has to be run fast.
-
 
     1. MongoDB
     	- Strength:
@@ -102,7 +105,7 @@ WHERE datname = current_database() AND pid <> pg_backend_pid();
 
 1. Run `npm i express pg` to install dependencies.
 
-2. Build the "queries.js" and "newIndex.js" files to connect the API.
+2. Build the "queries.js" and "Index.js" files to connect the API.
 
 3. To ensure the 'POST' request is working, use postman and test it with the following json - raw - body and API `http://localhost:3000/review`
 ```
@@ -134,7 +137,7 @@ WHERE datname = current_database() AND pid <> pg_backend_pid();
 
 #### Create API to support CRUD operations (MongoDB)
 
-1. Create the "queries.js" file inside "database/mongoDB" and connect with the existing "newIndex.js" file.
+1. Create the "queries.js" file inside "database/mongoDB" and connect with the existing "Index.js" file.
 
 2. **Please note that the webpage of the front end might encounter issue because the current front-end design is following PostgresSQL data structure.** The database of MongoDB structured differently than PostgreSQL.
 
@@ -345,7 +348,7 @@ SERVER_PORT=80
 
 	- add `.env` to .gitignore so when you push to github, other people won't see it.
 
-	- put `require('dotenv').config();` in the `newIndex.js` file so the data can get pick up.
+	- put `require('dotenv').config();` in the `Index.js` file so the data can get pick up.
 
 	- update `condensedMongoSchema.js` for env variables.
 
@@ -466,7 +469,7 @@ SERVER_PORT=80
 	12. G-zip and webpack production mode update
 		- Run `npm install compression compression-webpack-plugin brotli-gzip-webpack-plugin`
 		- Update `webpack.config.js` with production configuration.
-		- Update `newIndex.js` with compression dependency.
+		- Update `Index.js` with compression dependency.
 		- Update script of package.json
 		- Run `npm run prod` to test if it works in local machine.
 		- Once it works, push to github and upload to EC2 server. Then run your instance there and do nohup to do a loader.io test. For me, I was able to go up to 250 clients per second with average response time of much lower than 2000 (293ms is my result) and err rate of 0%. However, if I increases more clients per second, my err rate increases.

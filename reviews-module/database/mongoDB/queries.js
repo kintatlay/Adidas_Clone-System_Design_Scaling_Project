@@ -1,4 +1,4 @@
-/********  Fir redus ONLY  *******/
+/********  For redis ONLY  *******/
 // const useCache = require('./utils/redis.js');
 const Model = require('./condensedMongoSchema.js');
 
