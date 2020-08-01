@@ -2,8 +2,6 @@
 
 **Note: I did not build the front-end. I only take the front-end and scale the backend for practice.**
 
-[My Trello Progress Details](https://trello.com/b/ZbxAyAhh/system-design-with-nike-clone)
-
 ## Step 1 - Database Selection
 
 I used this video to get an idea on which database to select: https://www.youtube.com/watch?v=v5e_PasMdXc&feature=emb_logo
@@ -17,17 +15,18 @@ I used this video to get an idea on which database to select: https://www.youtub
     - Consistency: It's okay for a few second delay before a new review shows up while the user gets the old review.
     - Partition-tolerance: The web page has to be run fast.
 
+
     1. MongoDB
-      - Strength:
-        - There is professional paid support for setting up the security of the database.
-        - Ability to outsource the administration of the system over time.
-        - Simplicity of use - there are many article supports for this application and large community user base.
-        - Partition-tolerance - to scale fast
+    	- Strength:
+			- There is professional paid support for setting up the security of the database.
+			- Ability to outsource the administration of the system over time.
+			- Simplicity of use - there are many article supports for this application and large community user base.
+			- Partition-tolerance - to scale fast
       
     2. PostgreSQL
-      - Strength:
-        - Database dealing with structured data.
-        - Online research indicates that PostgreSQL is faster than MySQL.
+    	- Strength:
+			- Database dealing with structured data.
+			- Online research indicates that PostgreSQL is faster than MySQL.
 
 ## Step 2 - Develope Schemas for PostgreSQL and MongoDB
 
@@ -41,8 +40,6 @@ I used this video to get an idea on which database to select: https://www.youtub
 
   3. Build a script named `downloadFakeImage.js` to generate 1000 fake images to `image` folder
 
-  4. 
-
 #### MongoDB Schemas
 
 - I used this following reference for tutorial: https://medium.com/@brandon.lau86/one-to-many-relationships-with-mongodb-and-mongoose-in-node-express-d5c9d23d93c2
@@ -53,7 +50,7 @@ I used this video to get an idea on which database to select: https://www.youtub
 
 - I plan to seed over 10 millions of data into the schema that I just created.
 
-  1. Run `npm install mongodb mongoose` so that package.json file has the dependencies for connecting MongoDB (make sure you install Mongo in your computer first).
+	1. Run `npm install mongodb mongoose` so that package.json file has the dependencies for connecting MongoDB (make sure you install Mongo in your computer first).
 
 - Cd to the mongoDB folder and run `node condensedMongoSeed.js` to seed the database.
 
@@ -65,11 +62,11 @@ I used this video to get an idea on which database to select: https://www.youtub
 
 1. Build the seeding script: I plan to seed over 10 millions of data into CSV files and then load the csv to PostgreSQL.
 
-  - I used this following reference for tutorial of building the seeding script: https://medium.com/@danielburnsart/writing-a-large-amount-of-data-to-a-csv-file-using-nodes-drain-event-99dcaded99b5
+	- I used this following reference for tutorial of building the seeding script: https://medium.com/@danielburnsart/writing-a-large-amount-of-data-to-a-csv-file-using-nodes-drain-event-99dcaded99b5
 
 2. Seed csv file to PostgreSQL database
 
-  - run `node newPostgreSQLReviewSeed.js` to create the seeding file.
+	- run `node newPostgreSQLReviewSeed.js` to create the seeding file.
 
 #### PostgreSQL Schema
 
@@ -79,17 +76,17 @@ I used this video to get an idea on which database to select: https://www.youtub
 
 3. Upload schema.sql
 
-  - cd to the directory where the schema.sql file is stored and run the following command `psql -f schema.sql -p 5432 -U postgres` will upload the schema to postgreSQL database.
+	- cd to the directory where the schema.sql file is stored and run the following command `psql -f schema.sql -p 5432 -U postgres` will upload the schema to postgreSQL database.
 
 4. Check database
 
 ![SQL_database_diagram](https://user-images.githubusercontent.com/32609294/83194684-e2252580-a0ed-11ea-987f-25832609240d.JPG)
 
-  **Must login to postgres through "psql -U postgres" first**
+**Must login to postgres through "psql -U postgres" first**
 
-  - To show databases: `\l`
+- To show databases: `\l`
 
-  - To drop database:
+- To drop database:
     1. `REVOKE CONNECT ON DATABASE adidas FROM public;`
     2. 
 ```
@@ -101,7 +98,7 @@ WHERE datname = current_database() AND pid <> pg_backend_pid();
 
 #### Create API to support CRUD operations (PostgreSQL)
 
-[Web Tutorial for PostgreSQL](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
+[Web Tutorial for PostgreSQL Setup](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
 
 1. Run `npm i express pg` to install dependencies.
 
@@ -317,25 +314,25 @@ The execution time reduces from 3612.243ms to 2.371ms.
 
 - I will be performance testing (load test and stress test) GET and POST requests with 1, 10, 100, 1K requests per second using K6 and will use New Relic to obtain performance data.
 
-1. Sign up `New Relic` account on its website. Then select `New Relic APM`.
+1.	Sign up `New Relic` account on its website. Then select `New Relic APM`.
 
-  -  Then there is an installation video on the right hand side of the website. Follow the instructions to complete the installation.
+	-  Then there is an installation video on the right hand side of the website. Follow the instructions to complete the installation.
 
 2. Increase Node's memory by running the following script in terminal `set NODE_OPTIONS=--max_old_space_size=8000`. See [reference](https://medium.com/tomincode/increasing-nodes-memory-337dfb1a60dd)
 
-3. Install caching with Redis.
+3.	Install caching with Redis.
 
-  - Make sure webpack is in "development" mode.
+	- Make sure webpack is in "development" mode.
 
-  - Follow this [guide](https://codeburst.io/implement-caching-with-redis-in-express-js-and-mongodb-9aa09f9146ce)
+	- Follow this [guide](https://codeburst.io/implement-caching-with-redis-in-express-js-and-mongodb-9aa09f9146ce)
 
-  - For Window, you can install through ubuntu using instruction [here](https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/)
+	- For Window, you can install through ubuntu using instruction [here](https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/)
 
-  - To start, in one Ubuntu terminal, run `redis-server` and in another Ubuntu terminal, run `redis-cli`
+	- To start, in one Ubuntu terminal, run `redis-server` and in another Ubuntu terminal, run `redis-cli`
 
-  - Create `redis.js` file inside `database/mongoDB/utils` folder.
+	- Create `redis.js` file inside `database/mongoDB/utils` folder.
 
-4. Create a `.env` file and store these data inside:
+4.	Create a `.env` file and store these data inside:
 ```
 MONGO_HOST=localhost
 
@@ -344,34 +341,34 @@ REDIS_PORT=6379
 SERVER_PORT=80
 ```
 
-  - run `npm install npm dotenv`
+	- run `npm install npm dotenv`
 
-  - add `.env` to .gitignore so when you push to github, other people won't see it.
+	- add `.env` to .gitignore so when you push to github, other people won't see it.
 
-  - put `require('dotenv').config();` in the `newIndex.js` file so the data can get pick up.
+	- put `require('dotenv').config();` in the `newIndex.js` file so the data can get pick up.
 
-  - update `condensedMongoSchema.js` for env variables.
+	- update `condensedMongoSchema.js` for env variables.
 
-  - update `mongoDB/queries.js` file with `const redis = require('./utils/redis.js');`. 
+	- update `mongoDB/queries.js` file with `const redis = require('./utils/redis.js');`. 
 
-5. Install K6 (load testing tool)
+5.	Install K6 (load testing tool)
 
-  - Create the folder inside database folder and write a script to check the get and post methods.
+	- Create the folder inside database folder and write a script to check the get and post methods.
 
-  - Our target to get 1000 vus for local machine and 10000 in EC2.
+	- Our target to get 1000 vus for local machine and 10000 in EC2.
 
-  - The following result is what I get from K6 with GET request:
+	- The following result is what I get from K6 with GET request:
   ![k6-getReview](https://user-images.githubusercontent.com/32609294/83552108-1ae24780-a4be-11ea-8187-a500878a8525.JPG)
 
-  - The following result is what I get from New Relic:
+	- The following result is what I get from New Relic:
   ![newRelic-getReview](https://user-images.githubusercontent.com/32609294/83552291-5ed54c80-a4be-11ea-93eb-3d524bb9668d.JPG)
 
   ![newRelic-getReview](https://user-images.githubusercontent.com/32609294/83552907-56c9dc80-a4bf-11ea-8a3e-ab0e83737b48.png)
 
 ## Step 4 - Deploy the Service and Proxy
 
-1. Launch 1st EC2 instance to deploy Database
-	1. Launch EC2
+1.	Launch 1st EC2 instance to deploy Database
+	1.	Launch EC2
 		- Use `Amazon Linux 2` and select `t2.medium`.
 		- Hit `Next` until you hit security configuration
 		- Add rule for "SSH", "HTTP", "HTTPS", "Custom TCP" types. For "HTTP", "HTTPS", and "Custom TCP", select "Anywhere" for source. For "Custom TCP" only., put your port number for Port Range.
@@ -381,47 +378,47 @@ SERVER_PORT=80
 		- In AWS website, click `Elastic IPs` from the selection of the left drop down menu. Then press `Allocate Elastic IP address`. The reason we do this is to keep the IP address the same even if we shut down the instance because the IP address would change when we shut down instance. A new Public IPv4 address would create. Click on it. Click `Associate Elastic IP address`. With the `Instance` section, click on your current instance. Click `Associate`
 		- run `ssh ec2-user@13.56.236.35 -i adidas_micro.pem` - the number 54.153.0.155 you can get it from "IPv4 Public IP" in AWS EC2.
 
-	2. Install Node.js in EC2 Instance
+	2.	Install Node.js in EC2 Instance
 		- Follow [this](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html) instruction
 
-	3. Install MongoDB on EC2 Linux
+	3.	Install MongoDB on EC2 Linux
 		- Follow [this](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-amazon/) instruction for installation.
 		- When ask to create a /etc/yum.repos.d/mongodb-org-4.2.repo file, run the following command line `sudo vi /etc/yum.repos.d/mongodb-org-4.2.repo`. You can save the file by press `esc` and then run `:wq` to save
 
-	4. Install Git
+	4.	Install Git
 		- run `sudo yum install git`
 
-	5. Start Seeding
+	5.	Start Seeding
 		- Git clone repo from Github
 		- run `npm install` for dependencies
 		- Go to the seed file location and run `node condensedMongoSeed.js`
 
-	6. Change MongoDB config
+	6.	Change MongoDB config
 		- Run `sudo vi /etc/mongod.conf`
 		- Press `i` to edit
 		- comment out `bindIp: 127.0.0.1` by adding `#` to the left
 		- Add `bindIpAll: true` to the next line. Make sure you index it correctly.
 		- Run `sudo service mongod restart` to trigger the change.
 	
-	7. Testing server
+	7.	Testing server
 		- To test if database is setup correctly in EC2. Go to `.env` file in your local machine and change `MONGO_HOST=mongodb://localhost` to `MONGO_HOST=mongodb://13.56.236.35:27017`. Then make a webpage runs to see if data displays correctly. Note that "27017" is the default code for Mongo database.
 		
-2. Launch 2nd EC2 for service
-	1. Un-highlight redis script in `mongoDB/queries.js` file.
+2.	Launch 2nd EC2 for service
+	1.	Un-highlight redis script in `mongoDB/queries.js` file.
 
-	2. Delete the `bundle.js` file and rerun `bundle.js` file to get a js file without redis.
+	2.	Delete the `bundle.js` file and rerun `bundle.js` file to get a js file without redis.
 
-	3. Go to AWS website and create another instance for the service with Linux. Can use `t2.micro`.
+	3.	Go to AWS website and create another instance for the service with Linux. Can use `t2.micro`.
 
 	![AWS Security Setting Service](https://user-images.githubusercontent.com/32609294/83936634-3ed1b180-a77a-11ea-85f8-86d670a1e3a5.JPG)
 
-	4. Save the "pem" file inside the root folder.
+	4.	Save the "pem" file inside the root folder.
 
-	5. Press "connect" in AWS website and follow the instruction in "Connect to your instance". Go into the root folder where the pem file at and run `ssh ec2-user@13.57.191.130 -i adidas_service.pem`. "13.57.191.130" is the IPv4 Public IP.
+	5.	Press "connect" in AWS website and follow the instruction in "Connect to your instance". Go into the root folder where the pem file at and run `ssh ec2-user@13.57.191.130 -i adidas_service.pem`. "13.57.191.130" is the IPv4 Public IP.
 
-	6. Check to make sure you have `MONGO_HOST=mongodb://13.56.236.35:27017` in ".env" folder and then git push everything to github.
+	6.	Check to make sure you have `MONGO_HOST=mongodb://13.56.236.35:27017` in ".env" folder and then git push everything to github.
 
-	7. In the EC2 terminal, run these installations:
+	7. 	In the EC2 terminal, run these installations:
 		- Install Node.js in EC2 Instance
 			- Follow [this](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html) instruction
 		- Install Git
@@ -433,7 +430,7 @@ SERVER_PORT=80
 		- In the web browser, enter `13.57.191.130:3000`. The website should shows up. If it doesn't, it probably there is an error with MongoDB. Run `sudo service mongod start` to keep mongo going.
 		- In the EC2 server, you can keep it running even if you delete the terminal by running `nohup npm run ec2-dev &`. Then test it's running by enter `ps -ax | grep node`. (optional: you can run `killall node` to remove nohup)
 
-	8. Install loader.io into the same folder that you put the `bundle.js` file
+	8.	Install loader.io into the same folder that you put the `bundle.js` file
 		- Sign up for account with loader.io
 		- Inside loader.io, enter `http://13.57.191.130:3000/` for `New target host`. 
 		- Git push the file to github and git pull to the instance with the server and do the nohup to run the application.
@@ -447,7 +444,7 @@ SERVER_PORT=80
 		![loader io test result 2](https://user-images.githubusercontent.com/32609294/83870260-ca97ff00-a6e2-11ea-969c-9092c6decf9d.JPG)
 		- As you can tell from the diagram, around 225 clients per second seem to be my limit as it averages around 1941 ms response time, which is slightly below my target of average 2000 ms response time.
 
-	9. New Relic vs Loader.io comparsion
+	9.	New Relic vs Loader.io comparsion
 		- Next, we can switch to the New Relic website.
 		![newRelic Loader io comparsion 1](https://user-images.githubusercontent.com/32609294/83846837-15ece600-a6c0-11ea-933c-671c9f7eb935.JPG)
 		- From the diagram, you can tell that ~4720ms is different than the 8399ms. You can choose either the New Relic or Loader.io result in this part.
@@ -475,34 +472,34 @@ SERVER_PORT=80
 		- Once it works, push to github and upload to EC2 server. Then run your instance there and do nohup to do a loader.io test. For me, I was able to go up to 250 clients per second with average response time of much lower than 2000 (293ms is my result) and err rate of 0%. However, if I increases more clients per second, my err rate increases.
 		![loader io test result 3](https://user-images.githubusercontent.com/32609294/83937231-eb626200-a77f-11ea-9782-3724553e3452.JPG)
 
-3. Launch 3rd EC2 for NGINX
-	1. For setup, see [reference here](https://www.nginx.com/blog/setting-up-nginx/). Only install Nginx and not Nginx Plus. Note that the default security setting sets the nginx load balancer with port number of 80.
+3.	Launch 3rd EC2 for NGINX
+	1.	For setup, see [reference here](https://www.nginx.com/blog/setting-up-nginx/). Only install Nginx and not Nginx Plus. Note that the default security setting sets the nginx load balancer with port number of 80.
 
-	2. Run `systemctl status nginx.service` to see if it is actively running.
+	2.	Run `systemctl status nginx.service` to see if it is actively running.
 
-	3. Run `cd /etc/nginx/` and then `sudo vi nginx.conf`. See [reference](https://www.nginx.com/resources/wiki/start/topics/examples/dynamic_ssi/) to update "Nginx.conf". In my example, I updated with the following:
+	3.	Run `cd /etc/nginx/` and then `sudo vi nginx.conf`. See [reference](https://www.nginx.com/resources/wiki/start/topics/examples/dynamic_ssi/) to update "Nginx.conf". In my example, I updated with the following:
 
 	![Nginx conf Setup](https://user-images.githubusercontent.com/32609294/83935706-d6ca9d80-a770-11ea-8a90-c9fa93f37987.JPG)
 	Please note that proper indexing does matter. "13.57.191.130" is the IPv4 of the EC2 service. You can name anything to replace "nodejs". The "nodejs" part of the "http://nodejs" has to match the "nodejs" of the upstream.
 
-	4. Run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
+	4.	Run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
 	![Nginx Check](https://user-images.githubusercontent.com/32609294/83934492-5737d100-a766-11ea-8055-c2e483326dde.JPG)
 
-	5. Go to `loader.io` website and replace the target host. My previous target host is `13.57.191.130:3000` which refers to my EC2 service. I will replace to `18.222.19.182:80`. Copy the verification token to the current token in the "client" folder. Then git push to Git and go to EC2 service and re-run the service with the nohup setting activated. You may re-test the loader.io, the result should be similar to what we previously tested.
+	5.	Go to `loader.io` website and replace the target host. My previous target host is `13.57.191.130:3000` which refers to my EC2 service. I will replace to `18.222.19.182:80`. Copy the verification token to the current token in the "client" folder. Then git push to Git and go to EC2 service and re-run the service with the nohup setting activated. You may re-test the loader.io, the result should be similar to what we previously tested.
 
-4. Horizontal Scaling by create 4th and 5th EC2 Instances
-	1. Go to EC2 and select the 1st service. Select `Action` -> `Image` -> `Create Image`. For `Image name`, you can put `Service 2` and `2nd Instance for Service` for `Image description`. Then click `Create Image` on bottom. Then on AWS left drop down menu select `Images` then `AMIs`. Then click `Launch`. In security setting, following the previous security setting with the service:
+4.	Horizontal Scaling by create 4th and 5th EC2 Instances
+	1.	Go to EC2 and select the 1st service. Select `Action` -> `Image` -> `Create Image`. For `Image name`, you can put `Service 2` and `2nd Instance for Service` for `Image description`. Then click `Create Image` on bottom. Then on AWS left drop down menu select `Images` then `AMIs`. Then click `Launch`. In security setting, following the previous security setting with the service:
 	![AWS Security Setting Service](https://user-images.githubusercontent.com/32609294/83936634-3ed1b180-a77a-11ea-85f8-86d670a1e3a5.JPG)
 	Generate an unique pem file and put in root folder.
 	If you receive an error with `Please login as the user "ec2-user" rather than the user "root".`, change the ssh script as follow:
 	![Image-error](https://user-images.githubusercontent.com/32609294/83936804-d4ba0c00-a77b-11ea-8e19-626456274fd8.JPG)
 	Then go to the root folder and run `nohup npm run prod &`
-	2. Repeat the previous process to get another image.
-	3. Go to the instance of the Nginx load balancer and modify the file `nginx.conf` to capture the servers.
+	2.	Repeat the previous process to get another image.
+	3.	Go to the instance of the Nginx load balancer and modify the file `nginx.conf` to capture the servers.
 	![Nginx conf Setup2](https://user-images.githubusercontent.com/32609294/83937740-44cc9000-a784-11ea-8296-c7d63120f3b3.JPG)
 	Then run `sudo systemctl stop nginx`, then `sudo systemctl start nginx`, then `systemctl status nginx.service`. You should expect to see a green sign of "active (running)". If you get a red sign of "failed", look into the error and redo this step.
 
-5. After integrating with 3 services to Nginx, I began to look at loader.io, New Relic, and AWS Cloudwatch. Here's my analysis:
+5.	After integrating with 3 services to Nginx, I began to look at loader.io, New Relic, and AWS Cloudwatch. Here's my analysis:
 ![loader io 280 test setup](https://user-images.githubusercontent.com/32609294/83939546-b4e21280-a792-11ea-86d2-4692397e3fcb.JPG)
 ![loader io 280 test result](https://user-images.githubusercontent.com/32609294/83939560-d9d68580-a792-11ea-8a73-c628b5063169.JPG)
 ![loader io 300 test result](https://user-images.githubusercontent.com/32609294/83939566-e529b100-a792-11ea-9125-e8cd86a77f3e.JPG)
@@ -513,7 +510,7 @@ When I look at the AWS Cloudwatch result, I noticed that the CPU usage is pretty
 ![New Relic Result 2](https://user-images.githubusercontent.com/32609294/83939811-a72d8c80-a794-11ea-8fc3-329fdfc76170.JPG)
 When I look at the New Relic result, I realize that majority of the response time comes from "MongoDB products toArray". Therefore, I need to figure out how to improve the database.
 
-# TO BE CONTINUED
+## TO BE CONTINUED
 
 
 
